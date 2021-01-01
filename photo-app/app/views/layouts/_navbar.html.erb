@@ -1,10 +1,17 @@
 <header class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 bg-dark text-light border-bottom shadow-sm">
-  <p class="h5 my-0 me-md-auto fw-normal">Company name</p>
+  <p class="h5 my-0 me-md-auto fw-normal">
+    <%= link_to 'Photo App', root_path %>
+  </p>
   <nav class="my-2 my-md-0 me-md-3">
     <a class="p-2 text-light" href="#">Features</a>
     <a class="p-2 text-light" href="#">Enterprise</a>
     <a class="p-2 text-light" href="#">Support</a>
     <a class="p-2 text-light" href="#">Pricing</a>
   </nav>
-  <a class="btn btn-outline-primary" href="#">Sign up</a>
+  <% if user_signed_in? %>
+    <%= link_to 'Log Out', destroy_user_session_path, method: :delete, class:"btn btn-outline-secondary" %>
+  <% else %>
+    <%= link_to 'Log In', new_user_session_path, class:"btn btn-outline-primary mx-2" %>
+    <%= link_to 'Sign Up', new_user_registration_path, class:"btn btn-primary" %>
+  <% end %>
 </header>
