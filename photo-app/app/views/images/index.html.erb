@@ -11,7 +11,7 @@
   <tbody>
     <% @images.each do |image| %>
       <tr>
-        <td><%= image.name %></td>
+        <td><%= link_to image.name, image_path(image), class:'text-dark' %></td>
         <td><%= image_tag(image.picture.url, size: '100') if image.picture? %></td>
         <td class='td-buttons'>
           <%= link_to 'Show', image, class:'btn btn-outline-secondary' %>
