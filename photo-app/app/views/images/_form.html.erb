@@ -1,0 +1,16 @@
+<div class='col-lg-6 col-md-10 col-sm-12 mt-5'>
+  <%= form_with(model: image, html: {multipart: true}) do |f| %>
+
+    <div class="field mb-3">
+      <%= f.text_field :name, class:'form-control', autofocus: true, placeholder: 'Name' %>
+    </div>
+
+    <div class="field mb-3">
+      <%= f.file_field :picture, accept: 'image/jpeg, image/png, image/gif' %>
+    </div>
+
+    <div class="actions">
+      <%= f.submit "Submit", class: 'btn btn-secondary' %>
+    </div>
+  <% end %>
+</div>

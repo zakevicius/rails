@@ -1,0 +1,15 @@
+<h4>Editing Image</h4>
+
+<div class='card p-3 mb-5'>
+  <%= render 'form', image: @image %>
+</div>
+
+
+<div class='row'>
+  <div class='col-lg-1 col-md-2 col-sm-3 p-0'>
+    <%= link_to 'Show', @image,  class:'btn btn-info text-light' %>
+  </div>
+  <div class='col-lg-1 col-md-2 col-sm-3 p-0'>
+    <%= link_to 'Back', images_path,  class:'btn btn-dark text-light' %>
+  </div>
+</div>

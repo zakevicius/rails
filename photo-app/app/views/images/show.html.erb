@@ -1,0 +1,20 @@
+<div class='col-lg-6 col-md-10 col-sm-12 mb-5'>
+  <div class="card">
+    <div class="card-header">
+      <h4><%= @image.name %></h4>
+    </div>
+    <div class="card-body">
+      <%= image_tag(@image.picture.url, size: '150') if @image.picture? %>
+    </div>
+  </div>
+</div>
+
+<div class='row'>
+  <div class='col-lg-1 col-md-2 col-sm-3 p-0'>
+    <%= link_to 'Edit', edit_image_path(@image), class:'btn btn-info text-light' %>
+  </div>
+  <div class='col-lg-1 col-md-2 col-sm-3 p-0'>
+    <%= link_to 'Back', images_path,  class:'btn btn-dark text-light' %>
+  </div>
+</div>
+

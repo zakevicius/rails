@@ -1,0 +1,28 @@
+<h4>Images</h4>
+
+<table class="table table-hover table-borderless align-middle">
+  <thead>
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">Preview</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @images.each do |image| %>
+      <tr>
+        <td><%= image.name %></td>
+        <td><%= image_tag(image.picture.url, size: '100') if image.picture? %></td>
+        <td class='td-buttons'>
+          <%= link_to 'Show', image, class:'btn btn-outline-secondary' %>
+          <%= link_to 'Edit', edit_image_path(image), class:'btn btn-outline-secondary' %>
+          <%= link_to 'Delete', image, method: :delete, data: { confirm: 'Are you sure?' }, class:'btn btn-outline-danger' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Image', new_image_path, class:'btn btn-outline-secondary' %>

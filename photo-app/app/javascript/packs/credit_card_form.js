@@ -27,7 +27,6 @@ $(document).ready(function () {
       $form.find("input[type-submit]").prop("disabled", false);
     } else {
       token = res.id;
-      console.log(token);
       $("<input>")
         .attr({ type: "hidden", name: "payment[token]" })
         .val(token)
@@ -45,15 +44,11 @@ $(document).ready(function () {
   };
 
   submitHandler = (e) => {
-    console.log("handling submit");
-
     let $form = $(e.target);
     $form.find("input[type-submit").prop("disabled", true);
 
     if (Stripe) {
       Stripe.card.createToken($form, stripeResponseHandler);
-
-      console.log("stripe is here");
     } else {
       showError(
         "Failed to load credit card processing functionality. Please reload this page in your browser."
