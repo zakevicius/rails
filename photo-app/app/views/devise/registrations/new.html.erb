@@ -1,25 +1,31 @@
+<%= javascript_pack_tag 'credit_card_form' %>
+
+<script language='Javascript'>
+  Stripe.setPublishableKey('<%= ENV['STRIPE_PUBLISHABLE_KEY'] %>');
+</script>
+
 <div class='col-lg-6 col-md-10 col-sm-12 m-auto mt-5'>
-  <div class="card">
-    <div class="card-header">
+  <div class='card'>
+    <div class='card-header'>
       <h4>Sign up</h4>
     </div>
-    <div class="card-body">
-      <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-        <%= render "devise/shared/error_messages", resource: resource %>
+    <div class='card-body'>
+      <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { role: 'form', class: 'cc_form'}) do |f| %>
+        <%= render 'devise/shared/error_messages', resource: resource %>
 
-        <div class="mb-3">
-          <%= f.email_field :email, class:'form-control', placeholder: 'Email', autofocus: true, autocomplete: "email" %>
+        <div class='mb-3'>
+          <%= f.email_field :email, class:'form-control', placeholder: 'Email', autofocus: true, autocomplete: 'email' %>
         </div>
 
-        <div class="mb-3">
-          <%= f.password_field :password, class:'form-control', placeholder: 'Password', autocomplete: "new-password" %>
+        <div class='mb-3'>
+          <%= f.password_field :password, class:'form-control', placeholder: 'Password', autocomplete: 'new-password' %>
           <% if @minimum_password_length %>
           <em>(<%= @minimum_password_length %> characters minimum)</em>
           <% end %><br />
         </div>
 
-        <div class="mb-3">
-          <%= f.password_field :password_confirmation, class:'form-control', placeholder: 'Confirm Password', autocomplete: "new-password" %>
+        <div class='mb-3'>
+          <%= f.password_field :password_confirmation, class:'form-control', placeholder: 'Confirm Password', autocomplete: 'new-password' %>
         </div>
 
         <%= fields_for(:payment) do |p| %>
@@ -46,12 +52,12 @@
           </div>
         <% end %>
 
-        <div class="actions">
-          <%= f.submit "Sign up", class:'btn btn-secondary' %>
+        <div class='actions'>
+          <%= f.submit 'Sign up', class:'btn btn-secondary' %>
         </div>
       <% end %>    
     </div>
   </div>
 
-  <%= render "devise/shared/links" %>
+  <%= render 'devise/shared/links' %>
 </div>
