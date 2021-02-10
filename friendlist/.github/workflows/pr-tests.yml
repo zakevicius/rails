@@ -1,0 +1,150 @@
+name: Run Pull Request Tests
+
+on:
+  pull_request:
+    types: [opened]
+  issue_comment:
+    types: [created]
+  # TODO: test master branch on push and report to slack on failure
+  # push:
+  #   branches: [main]
+
+jobs:
+  prestart:
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Set Data
+        id: check
+        run: |
+          echo "::set-output name=triggered::${{ github.event_name != 'issue_comment' || github.event_name == 'issue_comment' && contains(github.event.comment.body, '/test') }}"
+          echo "::set-output name=pr_number::$(if [ "${{ github.event_name }}" = "issue_comment" ]; then echo "${{ github.event.issue.number }}"; else echo "${{ github.event.pull_request.number }}"; fi)"
+    outputs:
+      triggered: ${{ steps.check.outputs.triggered }}
+      pr_number: ${{ steps.check.outputs.pr_number }}
+
+  tests:
+    runs-on: ubuntu-18.04
+    if: needs.prestart.outputs.triggered == 'true'
+    needs:
+      - prestart
+    services:
+      mariadb:
+        image: mariadb:10.4-bionic
+        ports:
+          - "3306:3306"
+        env:
+          MYSQL_ROOT_PASSWORD: root
+        options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
+      redis:
+        image: redis
+        ports:
+          - "6379:6379"
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - name: Set RSpec Pending Status
+        uses: coingate/status-check-action@master
+        with:
+          github_token: "${{ secrets.GITHUB_TOKEN }}"
+          state: pending
+          commit_context: rspec
+
+      - name: Get PR Ref
+        id: get_pr_ref
+        uses: octokit/request-action@v2.x
+        with:
+          route: GET /repos/:repository/pulls/:issue_id
+          repository: ${{ github.repository }}
+          issue_id: "${{ needs.prestart.outputs.pr_number }}"
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+
+      - name: Checkout
+        uses: actions/checkout@v1
+        with:
+          ref: ${{ fromJson(steps.get_pr_ref.outputs.data).head.ref }}
+
+      - name: Checkout E2E Repo
+        uses: actions/checkout@v2
+        with:
+          repository: coingate/end2end-testing
+          token: ${{ secrets.TESTS_PAT }}
+          path: end2end-testing
+
+      - name: Set up Ruby
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: 2.6.6
+
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 10.20.1
+
+      - name: Cache Ruby Gems
+        uses: actions/cache@v2
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+
+      - name: Find Yarn Cache Location
+        id: yarn-cache
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - name: Cache Yarn Packages
+        uses: actions/cache@v1
+        with:
+          path: ${{ steps.yarn-cache.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Verify MariaDB connection
+        run: mysqladmin ping -h"127.0.0.1" -P"3306" -u"coingate" -p"coingate"
+
+      - name: Install MySQL client
+        run: sudo apt-get -yqq install libmysqlclient-dev
+
+      - name: Install Bundler
+        run: gem install bundler -v 1.17.3
+
+      - name: Set Sidekiq Enterprise Credentials
+        run: bundle config --local enterprise.contribsys.com ${{ secrets.SIDEKIQ_ENTERPRISE_CREDENTIALS }}
+
+      - name: Bundle Install
+        run: |
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3 --without production sandbox development
+
+      - name: Install Yarn Packages
+        run: |
+          yarn install --pure-lockfile
+
+      - name: Run RSpec Tests
+        id: rspec
+        run: |
+          bundle exec rails db:create
+          bundle exec rails db:schema:load
+          bundle exec rails db:migrate
+          bundle exec rails db:seed
+          bundle exec rspec spec
+          docker-compose up -d dynamodb
+        env:
+          RAILS_ENV: test
+          # TODO: replace with own daemon
+          DATABASE_USERNAME: root
+          DATABASE_PASSWORD: root
+          ENVKEY: ${{ secrets.ENVKEY }}
+
+      - name: Set RSpec Status
+        if: always()
+        uses: coingate/status-check-action@master
+        with:
+          github_token: "${{ secrets.GITHUB_TOKEN }}"
+          state: ${{ steps.rspec.outcome }}
+          commit_context: rspec
