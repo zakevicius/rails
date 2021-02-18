@@ -1,9 +1,8 @@
 <h1>My portfolio</h1>
 
-
 <% @projects.each do |project| %>
   <p><%= project.title %></p>
   <p><%= project.subtitle %></p>
   <p><%= project.body %></p>
-  <%= image_tag project.thumb_image %>
+  <%= image_tag project.thumb_image unless project.thumb_image.nil? %>
 <% end %>
