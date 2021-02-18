@@ -1,8 +1,11 @@
 <h1>My portfolio</h1>
 
+<%= link_to 'New project', new_project_path %>
+
 <% @projects.each do |project| %>
   <p><%= project.title %></p>
   <p><%= project.subtitle %></p>
   <p><%= project.body %></p>
   <%= image_tag project.thumb_image unless project.thumb_image.nil? %>
+  <%= link_to 'Edit', edit_project_path(project) %>
 <% end %>
