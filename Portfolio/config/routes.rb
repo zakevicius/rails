@@ -2,10 +2,12 @@
 
 Rails.application.routes.draw do
   root to: 'pages#home'
-
+  
   get 'about', to: 'pages#about'
   get 'contact', to: 'pages#contact'
+    
+  resources :projects, except: %i[show]
+  get 'project/:id', to: 'projects#show', as: 'show_project'
 
   resources :blogs
-  resources :projects
 end
