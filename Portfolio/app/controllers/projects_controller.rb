@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ProjectsController < ApplicationController
-  before_action :set_project, only: %[show, update, destroy]
+  before_action :set_project, only: %i[show edit update destroy]
 
   def index
     @projects = Project.all
@@ -23,12 +23,22 @@ class ProjectsController < ApplicationController
     end
   end
 
-  def update
+  def edit; end
 
+  def update
+    if @project.update(project_params)
+      redirect_to project_path, notice: 'Project updated!'
+    else
+      render 'edit'
+    end
   end
 
   def destroy
-
+    if @project.destroy
+      redirect_to projects_path, notice: 'Project deleted!'
+    else
+      render 'show'
+    end
   end
 
   private
