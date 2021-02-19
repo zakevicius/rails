@@ -41,6 +41,11 @@ class ProjectsController < ApplicationController
     end
   end
 
+  ### Testing globbing
+  # def missing
+  #   render 'new'
+  # end
+
   private
 
   def set_project

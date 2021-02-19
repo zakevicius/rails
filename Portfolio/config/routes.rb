@@ -7,8 +7,13 @@ Rails.application.routes.draw do
   get 'contact', to: 'pages#contact'
 
   resources :projects, except: %i[show]
-
   get 'project/:id', to: 'projects#show', as: 'show_project'
+
+  ### Globbing
+  # get 'projects/*missing', to: 'projects#missing', as: 'missing'
+
+  ### Dynamic route
+  # get 'query/:anything/:additional', to: 'pages#something'
 
   resources :blogs do
     member do
