@@ -1,0 +1,12 @@
+<h1>My portfolio</h1>
+
+<%= link_to 'New project', new_project_path %>
+
+<% @projects.each do |project| %>
+  <p><%= link_to project.title, show_project_path(project) %></p>
+  <p><%= project.subtitle %></p>
+  <p><%= project.body %></p>
+  <%= image_tag project.thumb_image unless project.thumb_image.nil? %>
+  <%= link_to 'Edit', edit_project_path(project) %>
+  <%= link_to 'Delete', project, method: :delete, data: { confirm: 'Are you sure?' } %>
+<% end %>
