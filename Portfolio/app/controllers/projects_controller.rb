@@ -7,6 +7,10 @@ class ProjectsController < ApplicationController
     @projects = Project.all
   end
 
+  def react
+    @react_projects = Project.react
+  end
+
   def new
     @project = Project.new
   end
