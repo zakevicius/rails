@@ -6,6 +6,7 @@ class Project < ApplicationRecord
 
   after_initialize :set_defaults
 
+  has_many :technologies
   scope :rails, -> { where(subtitle: 'Ruby on Rails') }
 
   ### Another way to define scope

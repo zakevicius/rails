@@ -10,7 +10,7 @@
 
 3.times do |n|
   Topic.create!(
-    title: "Topic #{n}"
+    title: "Topic #{n + 1}"
   )
 end
 
@@ -60,5 +60,11 @@ end
     'magni dolores eos qui ratione voluptatem sequi nesciunt.',
     main_image: 'https://via.placeholder.com/600x400',
     thumb_image: 'https://via.placeholder.com/350x200'
+  )
+end
+
+3.times do |n|
+  Project.last.technologies.create!(
+    name: "Technology #{n + 1}"
   )
 end
