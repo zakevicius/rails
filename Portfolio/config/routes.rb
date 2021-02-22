@@ -8,6 +8,7 @@ Rails.application.routes.draw do
 
   resources :projects, except: %i[show]
   get 'project/:id', to: 'projects#show', as: 'show_project'
+  get 'react-projects', to: 'projects#react'
 
   ### Globbing
   # get 'projects/*missing', to: 'projects#missing', as: 'missing'

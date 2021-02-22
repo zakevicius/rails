@@ -8,6 +8,12 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
+3.times do |n|
+  Topic.create!(
+    title: "Topic #{n + 1}"
+  )
+end
+
 10.times do |n|
   Blog.create!(
     title: "Title ##{n + 1}",
@@ -19,7 +25,8 @@
     'dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam '\
     'corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure '\
     'reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum '\
-    'fugiat quo voluptas nulla pariatur?'
+    'fugiat quo voluptas nulla pariatur?',
+    topic_id: Topic.last.id
   )
 end
 
@@ -30,15 +37,34 @@ end
   )
 end
 
-9.times do |n|
+8.times do |n|
   Project.create!(
     title: "Project title ##{n + 1}",
-    subtitle: "Project Subtitle ##{n + 1}",
+    subtitle: 'Ruby on Rails',
     body: "#{n + 1} Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, "\
     'totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt '\
     'explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur '\
     'magni dolores eos qui ratione voluptatem sequi nesciunt.',
     main_image: 'https://via.placeholder.com/600x400',
     thumb_image: 'https://via.placeholder.com/350x200'
+  )
+end
+
+1.times do |n|
+  Project.create!(
+    title: "Project title ##{n + 1}",
+    subtitle: 'React',
+    body: "#{n + 1} Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, "\
+    'totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt '\
+    'explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur '\
+    'magni dolores eos qui ratione voluptatem sequi nesciunt.',
+    main_image: 'https://via.placeholder.com/600x400',
+    thumb_image: 'https://via.placeholder.com/350x200'
+  )
+end
+
+3.times do |n|
+  Project.last.technologies.create!(
+    name: "Technology #{n + 1}"
   )
 end

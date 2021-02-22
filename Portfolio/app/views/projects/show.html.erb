@@ -3,4 +3,10 @@
 <h3><%= @project.subtitle %></h3>
 <p><%= @project.body %></p>
 
+<h2>Technologies:</h2>
+
+<% @project.technologies.each do |t| %>
+  <p><%= t.name %></p>
+<% end %>
+
 <%= link_to 'All', projects_path %>
