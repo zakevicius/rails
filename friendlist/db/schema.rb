@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_01_141841) do
+ActiveRecord::Schema.define(version: 2021_04_20_132958) do
 
   create_table "friends", force: :cascade do |t|
     t.string "first_name"
@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(version: 2021_01_01_141841) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "user_id"
+    t.boolean "encrypted"
     t.index ["user_id"], name: "index_friends_on_user_id"
   end
 

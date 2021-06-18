@@ -12,6 +12,25 @@
   <div class='mt-5'>
     <%= link_to 'Edit', edit_friend_path(@friend), class:'btn btn-secondary' %>
     <%= link_to 'Back', friends_path, class:'btn btn-dark' %>
+
+    <% if @friend.encrypted%>
+      <%= link_to 'Decrypt', decrypt_friend_path(@friend), class:'btn btn-dark' %>
+    <% else %>
+      <%= link_to 'Encrypt', encrypt_friend_path(@friend), class:'btn btn-dark' %>
+    <% end %>
   </div>
+
+  <% unless @encrypted.nil? %>
+  <div class='mt-5'>
+    <%= @encrypted["body"] %>
+  </div>
+  <% end %>
+
+  <% unless @decrypted.nil? %>
+  <div class='mt-5'>
+    <p>Decrypted data</p>
+    <%= @decrypted["body"] %>
+  </div>
+  <% end %>
 </div>
 
